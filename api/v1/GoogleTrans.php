@@ -8,7 +8,7 @@
 
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:application/json; charset=UTF-8");
-$texts = $_GET['t'];
+$texts = $_POST['t'];
 if (!isset($texts)) {
     echoResult(false, null);
     return;
