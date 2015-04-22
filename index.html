@@ -99,7 +99,7 @@
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-half btn-success btn-lg" onclick="transcribe();">Phiên âm</button>
-            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" onclick="translateX();"">Dịch nghĩa</button>
+            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" onclick="googleTrans();">Dịch nghĩa</button>
         </div>
         <div class="form-group">
             <textarea id="deTrans" class="form-control" rows="5" readonly></textarea>
@@ -113,6 +113,7 @@
     <script src="js/bootstrap.min.js"></script>
 
     <script>
+        var hostAPI = "http://api.vtrans.ga/v1/";
         $("#enTrans").keydown(function (event) {
             var text = $(this).val();
             if (text != "") {
@@ -133,28 +134,28 @@
             $("#load").show();
             var texts = $("#enTrans").val();
             $.ajax({
-                url: "getTrans.v2.php",
+                url: hostAPI + "transcribe.php",
                 method: "POST",
-                dataType: "text",
-                data: {texts: texts},
+                dataType: "json",
+                data: {t : texts},
                 success: function (data) {
-                    $("#deTrans").val(data.trim());
+                    $("#deTrans").val(data.trans);
                     $("#load").hide();
                 }
             });
         }
 
-        function translateX() {
+        function googleTrans() {
             $("#load").show();
             var texts = $("#enTrans").val();
 
             $.ajax({
-                url: "googletrans.php",
+                url: hostAPI + "googleTrans.php",
                 method: "POST",
-                dataType: "text",
-                data: {texts: texts},
+                dataType: "json",
+                data: {t: texts},
                 success: function (data) {
-                    $("#deTrans").val(data.trim());
+                    $("#deTrans").val(data.trans);
                     $("#load").hide();
                 }
             });
