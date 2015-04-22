@@ -85,7 +85,7 @@
 <body>
     <div class="container">
         <div id="load" style="display: none;">
-            <div class="bg-load"></div>
+            <div class="bg-load" id="bg-load"></div>
             <div class="spinner">
                 <div class="bounce1"></div>
                 <div class="bounce2"></div>
@@ -130,11 +130,15 @@
             $(this).hide();
         });
 
+        $("#bg-load").click(function () {// Giải quyết bế tắc khi load mãi éo được :3
+            $("#load").hide();
+        });
+
         function transcribe() {
             $("#load").show();
             var texts = $("#enTrans").val();
             $.ajax({
-                url: hostAPI + "transcribe.php",
+                url: hostAPI + "ranscribe.php",
                 method: "POST",
                 dataType: "json",
                 data: {t : texts},
