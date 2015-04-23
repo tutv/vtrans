@@ -5,84 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>vTrans - Công cụ tra phiên âm tiếng Anh</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        textarea {
-            font-size: 140%!important;
-        }
-        .clear-wrap {
-            position: absolute;
-            right: 7px;
-            top: 7px;
-            z-index: 100;
-        }
-
-        #load .bg-load {
-            width: 100%;
-            height: 100%;
-            background: rgba(77,77,77,.3);
-            position: fixed;
-            top: 0;
-            left: 0;
-            z-index: 997;
-        }
-        .spinner {
-            position: fixed;
-            z-index: 999;
-            top: 30%;
-            left: 42%;
-        }
-
-        .spinner {
-            margin: 100px auto 0;
-            width: 98px;
-            text-align: center;
-        }
-
-        .spinner > div {
-            width: 28px;
-            height: 28px;
-            background-color: #333;
-
-            border-radius: 100%;
-            display: inline-block;
-            -webkit-animation: bouncedelay 1.4s infinite ease-in-out;
-            animation: bouncedelay 1.4s infinite ease-in-out;
-            /* Prevent first frame from flickering when animation starts */
-            -webkit-animation-fill-mode: both;
-            animation-fill-mode: both;
-        }
-
-        .spinner .bounce1 {
-            -webkit-animation-delay: -0.32s;
-            animation-delay: -0.32s;
-        }
-
-        .spinner .bounce2 {
-            -webkit-animation-delay: -0.16s;
-            animation-delay: -0.16s;
-        }
-
-        @-webkit-keyframes bouncedelay {
-            0%, 80%, 100% { -webkit-transform: scale(0.0) }
-            40% { -webkit-transform: scale(1.0) }
-        }
-
-        @keyframes bouncedelay {
-            0%, 80%, 100% {
-                transform: scale(0.0);
-                -webkit-transform: scale(0.0);
-            } 40% {
-                  transform: scale(1.0);
-                  -webkit-transform: scale(1.0);
-              }
-        }
-
-        .btn-half {
-            width: 48%;
-        }
-    </style>
+    <link href="css/main.css" rel="stylesheet">
 </head>
 <body>
+    <div class="title-app">vTrans - What is English?</div>
     <div class="container">
         <div id="load" style="display: none;">
             <div class="bg-load" id="bg-load"></div>
@@ -92,78 +18,26 @@
                 <div class="bounce3"></div>
             </div>
         </div>
-        <h1>vTrans - What is English?</h1>
         <div class="form-group" style="position: relative;">
             <span class="close clear-wrap glyphicon glyphicon-remove" style="display: none;" id="emptyText"></span>
             <textarea id="enTrans" class="form-control" rows="5"></textarea>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-half btn-success btn-lg" onclick="transcribe();">Phiên âm</button>
-            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" onclick="googleTrans();">Dịch nghĩa</button>
+            <button type="button" class="btn btn-half btn-success btn-lg" onclick="dictionary();" id="btnEn">Dictionary</button>
+            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" onclick="googleTrans();">Translate</button>
         </div>
-        <div class="form-group">
-            <textarea id="deTrans" class="form-control" rows="5" readonly></textarea>
+        <div class="result">
+            <div id="deTrans" style="display: none;">
+                </div>
+            </div>
         </div>
-        <footer class="modal-footer">
-            <div class="pull-left">Thank <a href="https://translate.google.com" target="_blank" rel="nofollow">Google Translate</a> & <a href="http://lingorado.com" target="_blank" rel="nofollow">Lingorado.com</a></div>
-            <div>Copyright @TuTV</div>
+        <footer class="modal-footer fix-bottom">
+            <!--<div class="pull-left">Thank <a href="https://translate.google.com" target="_blank" rel="nofollow">Google</a> & <a href="http://lingorado.com" target="_blank" rel="nofollow">Lingorado.com</a></div>-->
+            <div class="pull-right">Copyright @TuTV</div>
         </footer>
     </div>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
-    <script>
-        var hostAPI = "http://api.vtrans.ga/v1/";
-        $("#enTrans").keydown(function (event) {
-            var text = $(this).val();
-            if (text != "") {
-                $("#emptyText").show();
-            }
-            else {
-                $("#emptyText").hide();
-            }
-        });
-
-        $("#emptyText").click(function () {
-            $("#enTrans").val("");
-            $("#deTrans").val("");
-            $(this).hide();
-        });
-
-        $("#bg-load").click(function () {// Giải quyết bế tắc khi load mãi éo được :3
-            $("#load").hide();
-        });
-
-        function transcribe() {
-            $("#load").show();
-            var texts = $("#enTrans").val();
-            $.ajax({
-                url: hostAPI + "ranscribe.php",
-                method: "POST",
-                dataType: "json",
-                data: {t : texts},
-                success: function (data) {
-                    $("#deTrans").val(data.trans);
-                    $("#load").hide();
-                }
-            });
-        }
-
-        function googleTrans() {
-            $("#load").show();
-            var texts = $("#enTrans").val();
-
-            $.ajax({
-                url: hostAPI + "googleTrans.php",
-                method: "POST",
-                dataType: "json",
-                data: {t: texts},
-                success: function (data) {
-                    $("#deTrans").val(data.trans);
-                    $("#load").hide();
-                }
-            });
-        }
-    </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
