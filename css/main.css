@@ -159,3 +159,7 @@ div#deTrans {
 #typeWord {
     padding-right: 5px;
 }
+
+.lab {
+    font-variant: small-caps;
+}

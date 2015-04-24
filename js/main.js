@@ -5,6 +5,7 @@ var deTrans = $("#deTrans");
 var btnEn = $("#btnEn");
 var audioUK;
 var audioUS;
+var version = 1;
 
 enTrans.focus(function () {
     alaEnTrans();
@@ -12,6 +13,24 @@ enTrans.focus(function () {
 
 enTrans.keydown(function () {
     alaEnTrans();
+});
+
+
+$(document).ready(function () {
+    $.ajax({
+        url: hostAPI + "version.php",
+        dataType: "json",
+        success: function (data) {
+            if (version != data.version) {
+                $("#updateVersion").modal("show");
+            }
+
+            $("#btnUpdate").click(function () {
+                var url = data.link;
+                $(location).attr("href", url);
+            });
+        }
+    });
 });
 
 function alaEnTrans() {
@@ -56,6 +75,11 @@ function transcribe() {
             deTrans.text(data.trans);
             $("#load").hide();
             deTrans.fadeIn();
+        },
+        error: function() {
+            deTrans.text("Error :[");
+            $("#load").hide();
+            deTrans.fadeIn();
         }
     });
 }
@@ -64,7 +88,7 @@ function dictionary() {
     $("#load").show();
     var texts = $("#enTrans").val();
     $.ajax({
-        url: hostAPI + "dicCam.php",
+        url: hostAPI + "dicCam.v2.php",
         method: "POST",
         dataType: "json",
         data: {t : texts},
@@ -73,12 +97,17 @@ function dictionary() {
                 deTrans.html(createDictionary(data.word, data.type, data.trans));
                 audioUK = new Audio(data.auUK);
                 audioUS = new Audio(data.auUS);
-                deTrans.fadeIn();
             }
             else {
-                deTrans.text("Error :[");
+                deTrans.text("Not Found :[");
             }
             $("#load").hide();
+            deTrans.fadeIn();
+        },
+        error: function() {
+            deTrans.text("Error :[");
+            $("#load").hide();
+            deTrans.fadeIn();
         }
     });
 }
@@ -94,6 +123,11 @@ function googleTrans() {
         data: {t: texts},
         success: function (data) {
             deTrans.text(data.trans);
+            $("#load").hide();
+            deTrans.fadeIn();
+        },
+        error: function() {
+            deTrans.text("Error :[");
             $("#load").hide();
             deTrans.fadeIn();
         }
