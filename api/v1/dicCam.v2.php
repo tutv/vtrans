@@ -46,6 +46,10 @@ else {
     // Get Transcribe
     $temp = explode("pron-us-->\n", $bodyContent)[1];
     $transcribe = explode("<div", $temp)[0];
+    if ($transcribe == "") {
+        $temp = explode("<span class=\"pron\">", $bodyContent)[1];
+        $transcribe = explode("</span></span>", $temp)[0];
+    }
 
     echoResult(true, $word, $typeWord, $transcribe, $audioUK, $audioUS);
 }
