@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>vTrans - Công cụ tra phiên âm tiếng Anh</title>
+    <title>vTrans - What is English?</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
 </head>
@@ -24,12 +24,41 @@
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-half btn-success btn-lg" onclick="dictionary();" id="btnEn">Dictionary</button>
-            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" onclick="googleTrans();">Translate</button>
+            <button type="button" class="btn btn-half pull-right btn-primary btn-lg" id="translate">Translate</button>
         </div>
-        <div class="result">
-            <div id="deTrans" style="display: none;">
+
+        <div id="result" style="display: none"><!-- Result -->
+            <div id="translate-result" style="display: none;"><!-- Translate Result -->
+                <div class="google">
+                    <span class="google-label">Google:</span>
+                    <span id="googleTrans"></span>
+                </div>
+                <div class="bing">
+                    <span class="bing-label">Bing:</span>
+                    <span id="bingTrans"></span>
                 </div>
             </div>
+
+            <div id="transcribe-result" style="display: none;"><!-- Transcribe Result -->
+                <span class="transcribe-label">Transcribe:</span>
+                <span id="transcribe"></span>
+            </div>
+
+            <div id="dictionary-result" style="display: none;"><!-- Dictionary Result -->
+                <span id="title-word"></span>
+                <span id="transcribe-word"></span>
+
+                <div class="audio">
+                    <span id="typeWord"></span>
+                    <span id="auUK" onclick="audioUK.play();">UK<span class="glyphicon glyphicon-volume-up speakers"></span></span>
+                    <span id="auUS" onclick="audioUS.play();">US<span class="glyphicon glyphicon-volume-up speakers"></span></span>
+                </div>
+            </div>
+
+            <div id="notify-error" style="display: none;">
+                <span>Error :[</span>
+            </div>
+        </div>
     </div>
 
     <footer class="modal-footer fix-bottom">
@@ -45,7 +74,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Ignore</button>
-                    <button type="button" class="btn btn-success" id="btnUpdate">Update</button>
+                    <a type="button" class="btn btn-success" id="btnUpdate" target="_blank">Update</a>
                 </div>
             </div>
         </div>

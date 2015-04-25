@@ -1,34 +1,8 @@
-textarea {
-    font-size: 140%!important;
-    resize: vertical;
-}
-.clear-wrap {
-    position: absolute;
-    right: 7px;
-    top: 7px;
-    z-index: 100;
-}
-.close {
-    font-size: 28px!important;
-}
+/**********************/
+/* Giao dien chung */
 
-footer.fix-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: #eee;
-}
-.result {
-    margin-bottom: 77px;
-    z-index: 10;
-}
-
-div#deTrans {
-    width: 100%;
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+.container {
+    margin-top: 100px;
 }
 
 .title-app {
@@ -45,10 +19,36 @@ div#deTrans {
     z-index: 1000;
 }
 
-.container {
-    margin-top: 100px;
+#enTrans {
+    font-size: 140%!important;
+    resize: vertical;
 }
 
+.btn-half {
+    width: 48%;
+}
+
+footer.fix-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #eee;
+}
+/**********************/
+/**********************/
+
+/**********************/
+/* Load */
+.close {
+    font-size: 28px!important;
+}
+.clear-wrap {
+    position: absolute;
+    right: 7px;
+    top: 7px;
+    z-index: 100;
+}
 
 #load .bg-load {
     width: 100%;
@@ -110,56 +110,71 @@ div#deTrans {
           -webkit-transform: scale(1.0);
       }
 }
+/**********************/
+/**********************/
 
-.btn-half {
-    width: 48%;
+
+/**********************/
+/* Result */
+#result {
+    margin-bottom: 77px;
+    z-index: 10;
+    width: 100%;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
 }
 
+/* Translate */ /* Transcribe */
+.google-label, .bing-label, .transcribe-label {
+    font-weight: bold;
+    padding-right: 3px;
+}
+
+.bing {
+    border-top: 1px solid #eee;
+    margin-top: 10px;
+    padding-top: 5px;
+}
+
+/* Dictionary */
 .sp {
     font-size: 66%;
     position: relative;
     bottom: 0.5em;
 }
-
 #title-word {
     font-size: 168%;
 }
-
-#transcribe {
-    margin-left: 20px;
-}
-
 .audio {
     margin-top: 5px;
 }
-
 .speakers {
     padding: 0 10px;
     cursor: pointer;
 }
-
 #auUK {
     color: #bf001c;
     padding-top: 15px;
 }
-
 #auUK:active {
     color: #9b001b;
 }
-
 #auUS {
     color: #003291;
     padding-top: 15px;
 }
-
 #auUS:active {
     color: #00225e;
 }
-
 #typeWord {
     padding-right: 5px;
 }
-
 .lab {
     font-variant: small-caps;
 }
+#transcribe-word {
+    margin-left: 10px;
+}
+/**********************/
+/**********************/

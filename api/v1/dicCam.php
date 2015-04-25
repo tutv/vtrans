@@ -2,7 +2,7 @@
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:application/json; charset=UTF-8");
 $text = $_POST['t'];
-if (!isset($text)) {
+if (!isset($text) || $text == "") {
     echoResult(false);
     return;
 }
@@ -44,8 +44,12 @@ else {
     $audioUS = explode("\"", $temp2)[0];
 
     // Get Transcribe
-    $temp = explode("class=\"pron\">/", $bodyContent)[1];
-    $transcribe = explode("/</span>", $temp)[0];
+    $temp = explode("pron-us-->\n", $bodyContent)[1];
+    $transcribe = explode("<div", $temp)[0];
+    if ($transcribe == "") {
+        $temp = explode("<span class=\"pron\">", $bodyContent)[1];
+        $transcribe = explode("</span></span>", $temp)[0];
+    }
 
     echoResult(true, $word, $typeWord, $transcribe, $audioUK, $audioUS);
 }

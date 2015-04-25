@@ -1,7 +1,6 @@
 var hostAPI = "http://api.vtrans.ga/v1/";
 
 var enTrans = $("#enTrans");
-var deTrans = $("#deTrans");
 var btnEn = $("#btnEn");
 var audioUK;
 var audioUS;
@@ -15,23 +14,22 @@ enTrans.keydown(function () {
     alaEnTrans();
 });
 
-
-$(document).ready(function () {
-    $.ajax({
-        url: hostAPI + "version.php",
-        dataType: "json",
-        success: function (data) {
-            if (version != data.version) {
-                $("#updateVersion").modal("show");
-            }
-
-            $("#btnUpdate").click(function () {
-                var url = data.link;
-                $(location).attr("href", url);
-            });
-        }
-    });
+enTrans.keyup(function () {
+    alaEnTrans();
 });
+
+//$(document).ready(function () {
+//    $.ajax({
+//        url: hostAPI + "version.php",
+//        dataType: "json",
+//        success: function (data) {
+//            if (version != data.version) {
+//                $("#updateVersion").modal("show");
+//            }
+//            $("#btnUpdate").attr("href", data.link);
+//        }
+//    });
+//});
 
 function alaEnTrans() {
     var text = enTrans.val();
@@ -54,17 +52,25 @@ function alaEnTrans() {
 $("#emptyText").click(function () {
     enTrans.val("");
     enTrans.focus();
-    deTrans.html("");
     $(this).hide();
-    deTrans.hide();
+    hideResult();
 });
 
 $("#bg-load").click(function () {// Giải quyết bế tắc khi load mãi éo được :3
-    $("#load").hide();
+    stopLoad();
 });
+
+$("#translate").click(function() {
+    translate();
+});
+
+function stopLoad() {
+    $("#load").hide();
+}
 
 function transcribe() {
     $("#load").show();
+    hideResult();
     var texts = $("#enTrans").val();
     $.ajax({
         url: hostAPI + "transcribe.php",
@@ -72,66 +78,98 @@ function transcribe() {
         dataType: "json",
         data: {t : texts},
         success: function (data) {
-            deTrans.text(data.trans);
-            $("#load").hide();
-            deTrans.fadeIn();
+            if (data.status == false) {
+                notifyError();
+            } else {
+                $("#transcribe").text(data.trans);
+                $("#transcribe-result").show();
+                showResult();
+            }
+            stopLoad();
         },
         error: function() {
-            deTrans.text("Error :[");
-            $("#load").hide();
-            deTrans.fadeIn();
+            notifyError();
+            stopLoad();
         }
     });
 }
 
 function dictionary() {
     $("#load").show();
+    hideResult();
     var texts = $("#enTrans").val();
     $.ajax({
-        url: hostAPI + "dicCam.v2.php",
+        url: hostAPI + "dicCam.php",
         method: "POST",
         dataType: "json",
         data: {t : texts},
         success: function (data) {
-            if (data.status == true) {
-                deTrans.html(createDictionary(data.word, data.type, data.trans));
-                audioUK = new Audio(data.auUK);
-                audioUS = new Audio(data.auUS);
+            if (data.status != true) {
+                notifyError();
             }
             else {
-                deTrans.text("Not Found :[");
+                $("#title-word").text(data.word);
+                $("#transcribe-word").html(data.trans);
+                $("#typeWord").html(data.type);
+                audioUK = new Audio(data.auUK);
+                audioUS = new Audio(data.auUS);
+
+                $("#dictionary-result").show();
+                showResult();
             }
-            $("#load").hide();
-            deTrans.fadeIn();
+            stopLoad();
         },
         error: function() {
-            deTrans.text("Error :[");
-            $("#load").hide();
-            deTrans.fadeIn();
+            notifyError();
+            stopLoad();
         }
     });
 }
 
-function googleTrans() {
+function translate() {
     $("#load").show();
+    hideResult();
     var texts = $("#enTrans").val();
 
     $.ajax({
-        url: hostAPI + "googleTrans.php",
+        url: hostAPI + "translate.php",
         method: "POST",
         dataType: "json",
         data: {t: texts},
-        success: function (data) {
-            deTrans.text(data.trans);
-            $("#load").hide();
-            deTrans.fadeIn();
+        success: function(data) {
+            if (data.status == false) {
+                notifyError();
+            } else {
+                $("#googleTrans").text(data.google);
+                $("#bingTrans").text(data.bing);
+
+                $("#translate-result").show();
+                showResult();
+            }
+            stopLoad();
         },
         error: function() {
-            deTrans.text("Error :[");
-            $("#load").hide();
-            deTrans.fadeIn();
+            notifyError();
+            stopLoad();
         }
     });
+}
+
+function notifyError() {
+    $("#notify-error").show();
+    showResult();
+}
+
+function showResult() {
+    $("#result").fadeIn();
+}
+
+function hideResult() {
+    $("#result").fadeOut(500);
+    $("#dictionary-result").delay(500).hide();
+    $("#translate-result").delay(500).hide();
+    $("#transcribe-result").delay(500).hide();
+    $("#notify-error").delay(500).hide();
 }
 
 function countWord(word) {
@@ -144,17 +182,3 @@ function countWord(word) {
     arr = word.split(" ");
     return arr.length;
 }
-
-function createDictionary(word, type, trans) {
-    $temp = "";
-    $temp += "<span id=\"title-word\">" + word + "</span>";
-    $temp += "<span id=\"transcribe\">" + trans + "</span>";
-    $temp += "<div class=\"audio\">";
-    $temp += "<span id=\"typeWord\">" + type + "</span>";
-    $temp += "<span id=\"auUK\" onclick=\"audioUK.play();\">UK<span class=\"glyphicon glyphicon-volume-up speakers\"></span></span>" +
-    "<span id=\"auUS\" onclick=\"audioUS.play();\">US<span class=\"glyphicon glyphicon-volume-up speakers\"></span></span></div>";
-
-    return $temp;
-}
-
-//$("#enTrans").val("English is a West Germanic language that was first spoken in early medieval England and is now a global lingua franca.[4][5] It is an official language of almost 60 sovereign states, the most commonly spoken language in the United Kingdom, the United States, Canada, Australia, Ireland, and New Zealand, and a widely spoken language in countries in the Caribbean, Africa, and southeast Asia.[6] It is the third most common native language in the world, after Mandarin and Spanish.[7] It is widely learned as a second language and is an official language of the United Nations, of the European Union, and of many other world and regional international organisations.");

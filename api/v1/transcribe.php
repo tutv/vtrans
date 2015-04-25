@@ -11,7 +11,7 @@ header("Content-Type:application/json; charset=UTF-8");
 $texts = $_POST['t'];
 
 if (!isset($texts)) {
-    echoResult(false, null);
+    echoResult(false);
 }
 else {
     include("Unirest.php");
@@ -30,7 +30,11 @@ else {
         $trans .= tachXau(explode("</span>", $arr[$i])[0]) . " ";
     }
 
-    echoResult(true, $trans);
+    if ($trans == "") {
+        echoResult(false);
+    } else {
+        echoResult(true, $trans);
+    }
 }
 
 function tachXau($str) {
@@ -43,7 +47,7 @@ function tachXau($str) {
     return $temp;
 }
 
-function echoResult($s, $t) {
+function echoResult($s, $t = null) {
     echo json_encode(array("status" => $s, "trans" => $t));
 }
 
