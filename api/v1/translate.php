@@ -55,7 +55,8 @@ function googleTrans($text) {
 }
 
 function bingTrans($text) {
-    $appID = "TYhZomhAwueS6k7vgtnwD-E3sqlHHs1_RqVAdJE8tB_mg_nV8W1oTCtdBUC51Ouvw";
+//    $appID = "TafoeM9A_Svq_9ImhDLleFnB3-VC5YPaygMKzCjOL6kk*";
+    $appID = getAppIDBing();
     $text = str_replace("\"", "", $text);
     $text = str_replace("\n", ". ", $text);
     $url = "http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=\"" . $appID . "\""
@@ -72,6 +73,16 @@ function bingTrans($text) {
     $trans = explode("\",\"", $temp)[0];
 
     return $trans;
+}
+
+function getAppIDBing() {
+    $url = "http://www.bing.com/translator/dynamic/216455/js/LandingPage.js";
+    $content = Unirest\Request::get($url, null, null);
+    $body = $content->raw_body;
+    $temp = explode("appId:\"", $body)[1];
+    $temp = explode("\"", $temp)[0];
+
+    return $temp;
 }
 
 ?>
