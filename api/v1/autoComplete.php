@@ -3,7 +3,7 @@
 header("Access-Control-Allow-Origin:*");
 header("Content-Type:application/json; charset=UTF-8");
 
-$text = $_GET["t"];
+$text = $_POST["t"];
 
 if (!isset($text)) {
     echoResult(false);
@@ -26,7 +26,7 @@ if (!isset($text)) {
         $count = 0;
         for ($i=0; $i<$length; $i++) {
             $searchText = $list[$i]->searchtext;
-            if (str_word_count($searchText) == 1 && $text != $searchText) {
+            if (str_word_count($searchText) == 1) {
                 array_push($result, $searchText);
                 $count++;
             }
@@ -42,7 +42,7 @@ if (!isset($text)) {
 }
 
 function echoResult($s, $arr = null) {
-    echo json_encode(array("status" => $s, "result" => $arr));
+    echo json_encode(array("status" => $s, "results" => $arr));
 }
 
 ?>

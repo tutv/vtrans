@@ -4,7 +4,11 @@ var enTrans = $("#enTrans");
 var btnEn = $("#btnEn");
 var audioUK;
 var audioUS;
-var version = 1;
+var version = 1
+
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
 
 enTrans.focus(function () {
     alaEnTrans();
@@ -17,19 +21,6 @@ enTrans.keydown(function () {
 enTrans.keyup(function () {
     alaEnTrans();
 });
-
-//$(document).ready(function () {
-//    $.ajax({
-//        url: hostAPI + "version.php",
-//        dataType: "json",
-//        success: function (data) {
-//            if (version != data.version) {
-//                $("#updateVersion").modal("show");
-//            }
-//            $("#btnUpdate").attr("href", data.link);
-//        }
-//    });
-//});
 
 function alaEnTrans() {
     var text = enTrans.val();
@@ -71,7 +62,7 @@ function stopLoad() {
 function transcribe() {
     $("#load").show();
     hideResult();
-    var texts = $("#enTrans").val();
+    var texts = enTrans.val();
     $.ajax({
         url: hostAPI + "transcribe.php",
         method: "POST",
@@ -90,14 +81,15 @@ function transcribe() {
         error: function() {
             notifyError();
             stopLoad();
-        }
+        },
+        cache: true
     });
 }
 
 function dictionary() {
     $("#load").show();
     hideResult();
-    var texts = $("#enTrans").val();
+    var texts = enTrans.val().trim();
     $.ajax({
         url: hostAPI + "dicCam.php",
         method: "POST",
@@ -122,14 +114,15 @@ function dictionary() {
         error: function() {
             notifyError();
             stopLoad();
-        }
+        },
+        cache: true
     });
 }
 
 function translate() {
     $("#load").show();
     hideResult();
-    var texts = $("#enTrans").val();
+    var texts = enTrans.val();
 
     $.ajax({
         url: hostAPI + "translate.php",
@@ -151,7 +144,8 @@ function translate() {
         error: function() {
             notifyError();
             stopLoad();
-        }
+        },
+        cache: true
     });
 }
 
@@ -182,3 +176,30 @@ function countWord(word) {
     arr = word.split(" ");
     return arr.length;
 }
+
+enTrans.textcomplete([{
+    match: /\b(\w{2,})$/,
+    search: function (term, callback) {
+        $.ajax({
+            method: "POST",
+            url: "http://api.vtrans.ga/v1/autoComplete.php",
+            data: {t: term},
+            dataType: "json",
+            success: function (data) {
+                if (data.status == true) {
+                    callback(data.results);
+                } else {
+                    callback([]);
+                }
+            },
+            error: function () {
+                callback([]);
+            }
+        });
+    },
+    index: 1,
+    replace: function (word) {
+        return word + ' ';
+    },
+    cache: true
+}]);
