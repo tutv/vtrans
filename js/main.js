@@ -62,7 +62,8 @@ function stopLoad() {
 function transcribe() {
     $("#load").show();
     hideResult();
-    var texts = enTrans.val();
+    var texts = enTrans.val().trim()
+    enTrans.val(texts);
     $.ajax({
         url: hostAPI + "transcribe.php",
         method: "POST",
@@ -90,6 +91,7 @@ function dictionary() {
     $("#load").show();
     hideResult();
     var texts = enTrans.val().trim();
+    enTrans.val(texts);
     $.ajax({
         url: hostAPI + "dicCam.php",
         method: "POST",
@@ -122,8 +124,8 @@ function dictionary() {
 function translate() {
     $("#load").show();
     hideResult();
-    var texts = enTrans.val();
-
+    var texts = enTrans.val().trim();
+    enTrans.val(texts);
     $.ajax({
         url: hostAPI + "translate.php",
         method: "POST",
