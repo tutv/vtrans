@@ -4,11 +4,10 @@ var enTrans = $("#enTrans");
 var btnEn = $("#btnEn");
 var audioUK;
 var audioUS;
-var version = 1
 
-String.prototype.capitalize = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
+//String.prototype.capitalize = function() {
+//    return this.charAt(0).toUpperCase() + this.slice(1);
+//}
 
 enTrans.focus(function () {
     alaEnTrans();
@@ -59,10 +58,31 @@ function stopLoad() {
     $("#load").hide();
 }
 
-function transcribe() {
+function startLoad() {
     $("#load").show();
+}
+
+function notifyError() {
+    $("#notify-error").show();
+    showResult();
+}
+
+function showResult() {
+    $("#result").fadeIn();
+}
+
+function hideResult() {
+    $("#result").hide();
+    $("#dictionary-result").hide();
+    $("#translate-result").hide();
+    $("#transcribe-result").hide();
+    $("#notify-error").hide();
+}
+
+function transcribe() {
     hideResult();
-    var texts = enTrans.val().trim()
+    startLoad();
+    var texts = enTrans.val().trim();
     enTrans.val(texts);
     $.ajax({
         url: hostAPI + "transcribe.php",
@@ -88,8 +108,8 @@ function transcribe() {
 }
 
 function dictionary() {
-    $("#load").show();
     hideResult();
+    startLoad();
     var texts = enTrans.val().trim();
     enTrans.val(texts);
     $.ajax({
@@ -122,8 +142,8 @@ function dictionary() {
 }
 
 function translate() {
-    $("#load").show();
     hideResult();
+    startLoad();
     var texts = enTrans.val().trim();
     enTrans.val(texts);
     $.ajax({
@@ -151,23 +171,6 @@ function translate() {
     });
 }
 
-function notifyError() {
-    $("#notify-error").show();
-    showResult();
-}
-
-function showResult() {
-    $("#result").fadeIn();
-}
-
-function hideResult() {
-    $("#result").fadeOut(500);
-    $("#dictionary-result").delay(500).hide();
-    $("#translate-result").delay(500).hide();
-    $("#transcribe-result").delay(500).hide();
-    $("#notify-error").delay(500).hide();
-}
-
 function countWord(word) {
     word = word.trim();
     if (word == "") return 0;
@@ -188,11 +191,7 @@ enTrans.textcomplete([{
             data: {t: term},
             dataType: "json",
             success: function (data) {
-                if (data.status == true) {
-                    callback(data.results);
-                } else {
-                    callback([]);
-                }
+                callback(data.results);
             },
             error: function () {
                 callback([]);
