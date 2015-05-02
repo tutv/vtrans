@@ -28,7 +28,7 @@ function echoResult($status, $google = null, $bing = null) {
 }
 
 function googleTrans($text) {
-    $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=" . urlencode($text);
+    $url = "https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=vi&dt=t&q=" . urlencode($text) . "&ie=UTF-8&oe=UTF-8";
 
     $content = Unirest\Request::post($url, null, null);
 
