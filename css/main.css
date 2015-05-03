@@ -150,9 +150,18 @@ footer.fix-bottom {
     margin-bottom: 77px;
     z-index: 10;
     width: 100%;
-    padding: 6px 12px;
+    /*padding: 6px 12px;*/
     border-radius: 4px;
     border: 1px solid #ccc;
+}
+
+#translate-result, #transcribe-result, #dictionary-result,
+#error-error, #error-notfound, #error-net, #error-empty {
+    padding: 6px 12px;
+}
+
+#error-error, #error-notfound, #error-net, #error-empty {
+    /*font-size: 150%;*/
 }
 
 /* Translate */ /* Transcribe */

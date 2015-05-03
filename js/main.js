@@ -43,11 +43,9 @@ $("#emptyText").click(function () {
     enTrans.val("");
     enTrans.focus();
     $(this).hide();
-    hideResult();
-});
 
-$("#bg-load").click(function () {// Giải quyết bế tắc khi load mãi éo được :3
-    stopLoad();
+    btnEn.text("Dictionary");
+    btnEn.attr("onclick", "dictionary();");
 });
 
 $("#translate").click(function() {
@@ -62,8 +60,9 @@ function startLoad() {
     $("#load").show();
 }
 
-function notifyError() {
-    $("#notify-error").show();
+function notifyError(type) {
+    var noti = $("#error-" + type);
+    noti.show();
     showResult();
 }
 
@@ -76,7 +75,19 @@ function hideResult() {
     $("#dictionary-result").hide();
     $("#translate-result").hide();
     $("#transcribe-result").hide();
-    $("#notify-error").hide();
+    $("#error-error").hide();
+    $("#error-net").hide();
+    $("#error-empty").hide();
+    $("#error-notfound").hide();
+}
+
+function checkEmpty() {
+    var texts = enTrans.val().trim();
+    if (texts == "") {
+        return true;
+    }
+
+    return false;
 }
 
 function transcribe() {
@@ -91,7 +102,7 @@ function transcribe() {
         data: {t : texts},
         success: function (data) {
             if (data.status == false) {
-                notifyError();
+                notifyError("error");
             } else {
                 $("#transcribe").text(data.trans);
                 $("#transcribe-result").show();
@@ -100,7 +111,7 @@ function transcribe() {
             stopLoad();
         },
         error: function() {
-            notifyError();
+            notifyError("net");
             stopLoad();
         },
         cache: true
@@ -108,9 +119,21 @@ function transcribe() {
 }
 
 function dictionary() {
-    hideResult();
-    startLoad();
     var texts = enTrans.val().trim();
+    if (countWord(texts) > 1) {
+        transcribe();
+        alaEnTrans();
+        return;
+    }
+    hideResult();
+
+    if (checkEmpty()) {
+        notifyError("empty");
+        return;
+    }
+
+    startLoad();
+
     enTrans.val(texts);
     $.ajax({
         url: hostAPI + "dicCam.php",
@@ -118,8 +141,8 @@ function dictionary() {
         dataType: "json",
         data: {t : texts},
         success: function (data) {
-            if (data.status != true) {
-                notifyError();
+            if (data.status == false) {
+                notifyError("notfound");
             }
             else {
                 $("#title-word").text(data.word);
@@ -134,7 +157,7 @@ function dictionary() {
             stopLoad();
         },
         error: function() {
-            notifyError();
+            notifyError("net");
             stopLoad();
         },
         cache: true
@@ -143,6 +166,12 @@ function dictionary() {
 
 function translate() {
     hideResult();
+
+    if (checkEmpty()) {
+        notifyError("empty");
+        return;
+    }
+
     startLoad();
     var texts = enTrans.val().trim();
     enTrans.val(texts);
@@ -153,7 +182,7 @@ function translate() {
         data: {t: texts},
         success: function(data) {
             if (data.status == false) {
-                notifyError();
+                notifyError("error");
             } else {
                 $("#googleTrans").text(data.google);
                 $("#bingTrans").text(data.bing);
@@ -164,7 +193,7 @@ function translate() {
             stopLoad();
         },
         error: function() {
-            notifyError();
+            notifyError("net");
             stopLoad();
         },
         cache: true
