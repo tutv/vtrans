@@ -57,4 +57,3 @@ else {
 function echoResult($s, $w = null, $type = null, $tr = null, $au1 = null, $au2 = null) {
     print_r(json_encode(array("status" => $s, "word" => $w, "type" => $type, "trans" => $tr, "auUK" => $au1, "auUS" => $au2)));
 }
-?>

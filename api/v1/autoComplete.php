@@ -44,5 +44,3 @@ if (!isset($text)) {
 function echoResult($s, $arr = []) {
     echo json_encode(array("status" => $s, "results" => $arr));
 }
-
-?>

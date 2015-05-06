@@ -84,5 +84,3 @@ function getAppIDBing() {
 
     return $temp;
 }
-
-?>

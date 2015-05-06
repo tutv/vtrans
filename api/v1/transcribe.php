@@ -50,5 +50,3 @@ function tachXau($str) {
 function echoResult($s, $t = null) {
     echo json_encode(array("status" => $s, "trans" => $t));
 }
-
-?>

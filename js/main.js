@@ -83,11 +83,7 @@ function hideResult() {
 
 function checkEmpty() {
     var texts = enTrans.val().trim();
-    if (texts == "") {
-        return true;
-    }
-
-    return false;
+    return texts == "";
 }
 
 function transcribe() {
@@ -207,7 +203,7 @@ function countWord(word) {
     while (word.indexOf("  ") >=0) {
         word = word.replace("  ", " ");
     }
-    arr = word.split(" ");
+    var arr = word.split(" ");
     return arr.length;
 }
 
