@@ -16,14 +16,20 @@ if (!isset($texts)) {
 else {
     include("Unirest.php");
 
-    $body = array("text_to_transcribe" => $texts, "submit" => "Show transcription",
-        "output_dialect" => "am", "output_style" => "only_tr", "preBracket" => "", "postBracket" => "");
+    $body = array(
+        "text_to_transcribe" => $texts,
+        "submit" => "Show transcription",
+        "output_dialect" => "am",
+        "output_style" => "only_tr",
+        "preBracket" => "",
+        "postBracket" => ""
+    );
     $headers = null;
     $content = Unirest\Request::post("http://lingorado.com/ipa", $headers, $body);
     $raw = $content->raw_body;
 
-    $temp = explode("<p>", $raw)[1];
-    $temp = explode("</p>", $temp)[0];
+    $temp = explode("id=\"transcr_output\">", $raw)[1];
+    $temp = explode("<script>", $temp)[0];
     $arr = explode("class=\"transcribed_word\">", $temp);
     $trans = "";
     for ($i = 1; $i < count($arr); $i++) {
